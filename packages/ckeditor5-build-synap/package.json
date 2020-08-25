@@ -1,19 +1,19 @@
 {
   "name": "@synap-ac/ckeditor5",
-  "version": "20.0.0",
+  "version": "20.0.2",
   "description": "The super build contains multiple flavours of ckeditor5.",
   "keywords": [],
   "main": "./build/ckeditor.js",
   "files": [
     "build"
   ],
-  "private": true,
   "access": {
     "restricted": true
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-adapter-ckfinder": "^20.0.0",
     "@ckeditor/ckeditor5-autoformat": "^20.0.0",
+    "@ckeditor/ckeditor5-alignment": "^20.0.0",
     "@ckeditor/ckeditor5-basic-styles": "^20.0.0",
     "@ckeditor/ckeditor5-block-quote": "^20.0.0",
     "@ckeditor/ckeditor5-ckfinder": "^20.0.0",
