@@ -8,7 +8,7 @@ import ClassicEditorBase from "@ckeditor/ckeditor5-editor-classic/src/classicedi
 import BalloonEditorBase from "@ckeditor/ckeditor5-editor-balloon/src/ballooneditor";
 
 import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
-import UploadAdapter from "@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter";
+import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
 import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
 import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
@@ -30,6 +30,7 @@ import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefrom
 import Table from "@ckeditor/ckeditor5-table/src/table";
 import TableToolbar from "@ckeditor/ckeditor5-table/src/tabletoolbar";
 import TextTransformation from "@ckeditor/ckeditor5-typing/src/texttransformation";
+import UploadAdapter from "@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter";
 
 class ClassicEditor extends ClassicEditorBase {}
 class BalloonEditor extends BalloonEditorBase {}
@@ -37,7 +38,7 @@ class BalloonEditor extends BalloonEditorBase {}
 // Plugins to include in the build.
 const plugins = [
 	Essentials,
-	UploadAdapter,
+	Alignment,
 	Autoformat,
 	Bold,
 	Italic,
@@ -59,6 +60,7 @@ const plugins = [
 	Table,
 	TableToolbar,
 	TextTransformation,
+	UploadAdapter
 ];
 
 ClassicEditor.builtinPlugins = plugins;
