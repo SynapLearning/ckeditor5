@@ -22,7 +22,6 @@ import FocusCycler from '@ckeditor/ckeditor5-ui/src/focuscycler';
 
 import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
-import '../../../theme/textalternativeform.css';
 import '@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css';
 
 /**
@@ -191,7 +190,7 @@ export default class TextAlternativeFormView extends View {
 		const labeledInput = new LabeledFieldView( this.locale, createLabeledInputText );
 
 		labeledInput.label = t( 'Text alternative' );
-		labeledInput.fieldView.placeholder = t( 'Text alternative' );
+		// labeledInput.fieldView.placeholder = t( 'Text alternative' );
 
 		return labeledInput;
 	}

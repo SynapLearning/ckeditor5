@@ -6,12 +6,8 @@
 @import "@ckeditor/ckeditor5-ui/theme/mixins/_rwd.css";
 @import "@ckeditor/ckeditor5-ui/theme/mixins/_dir.css";
 
-.ck-vertical-form > .ck-button:nth-last-child(2)::after {
-	border-right: 1px solid var(--ck-color-base-border);
-}
-
-.ck.ck-responsive-form {
-	padding: var(--ck-spacing-standard);
+.ck.ck-media-form {
+	padding: var(--ck-spacing-large);
 
 	&:focus {
 		/* See: https://github.com/ckeditor/ckeditor5/issues/4773 */
