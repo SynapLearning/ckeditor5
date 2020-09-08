@@ -11,6 +11,9 @@ import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
 import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
 import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
 import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
+import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
 import CKFinder from "@ckeditor/ckeditor5-ckfinder/src/ckfinder";
@@ -43,6 +46,9 @@ const plugins = [
 	Autoformat,
 	Bold,
 	Italic,
+	Subscript,
+	Superscript,
+	Underline,
 	BlockQuote,
 	CKFinder,
 	EasyImage,
