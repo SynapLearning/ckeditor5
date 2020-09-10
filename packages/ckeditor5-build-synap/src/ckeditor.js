@@ -11,6 +11,9 @@ import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
 import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
 import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
 import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
+import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
 import CKFinder from "@ckeditor/ckeditor5-ckfinder/src/ckfinder";
@@ -21,6 +24,7 @@ import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
 import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import ImageUpload from "@ckeditor/ckeditor5-image/src/imageupload";
+import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 import List from "@ckeditor/ckeditor5-list/src/list";
@@ -42,6 +46,9 @@ const plugins = [
 	Autoformat,
 	Bold,
 	Italic,
+	Subscript,
+	Superscript,
+	Underline,
 	BlockQuote,
 	CKFinder,
 	EasyImage,
@@ -51,6 +58,7 @@ const plugins = [
 	ImageStyle,
 	ImageToolbar,
 	ImageUpload,
+	ImageResize,
 	Indent,
 	Link,
 	List,
