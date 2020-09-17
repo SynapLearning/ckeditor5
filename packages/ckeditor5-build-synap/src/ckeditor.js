@@ -26,6 +26,7 @@ import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 import List from "@ckeditor/ckeditor5-list/src/list";
 import MediaEmbed from "@ckeditor/ckeditor5-media-embed/src/mediaembed";
+import MathType from '@wiris/mathtype-ckeditor5';
 import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
 import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
@@ -62,6 +63,7 @@ const plugins = [
 	Indent,
 	Link,
 	List,
+	MathType,
 	MediaEmbed,
 	Paragraph,
 	PasteFromOffice,
