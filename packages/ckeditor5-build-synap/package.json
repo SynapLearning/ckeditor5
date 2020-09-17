@@ -1,6 +1,6 @@
 {
   "name": "@synap-ac/ckeditor5",
-  "version": "20.0.3",
+  "version": "20.0.4",
   "description": "The super build contains multiple flavours of ckeditor5.",
   "keywords": [],
   "main": "./build/ckeditor.js",
