@@ -90,7 +90,7 @@ describe( 'TextAlternativeFormView', () => {
 			} );
 
 			it( 'should register child views\' #element in #focusTracker', () => {
-				const spy = testUtils.sinon.spy( FocusTracker.prototype, 'add' );
+				const spy = testUtils.sinon.spy( view.focusTracker, 'add' );
 
 				view.render();
 
