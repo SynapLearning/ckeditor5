@@ -282,7 +282,6 @@ export default class MediaFormView extends View {
 
 		labeledInput.label = t( 'Media URL' );
 		labeledInput.infoText = this._urlInputViewInfoDefault;
-		// inputField.placeholder = 'https://example.com';
 
 		inputField.on( 'input', () => {
 			// Display the tip text only when there is some value. Otherwise fall back to the default info text.
