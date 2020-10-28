@@ -255,7 +255,7 @@ class BootstrapEditorUI extends EditorUI {
 				const commandValue = isParagraph ? undefined : { value: option.model };
 
 				editor.execute( commandName, commandValue );
-				editor.editing.view.focus();
+				editor.focus();
 			} );
 
 			dropdownMenu.append( menuItem );
