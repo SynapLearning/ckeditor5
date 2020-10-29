@@ -38,18 +38,20 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount';
 
 import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config';
+import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
+import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [
-			ArticlePluginSet, Underline, Strikethrough, Superscript, Subscript, Code, RemoveFormat,
-			FontColor, FontBackgroundColor, FontFamily, FontSize, Highlight,
-			CodeBlock, TodoList, TableProperties, TableCellProperties,
-			EasyImage, ImageResize, LinkImage, AutoImage,
-			AutoLink, Mention, TextTransformation,
-			Alignment, IndentBlock,
-			PageBreak, HorizontalLine,
-			SpecialCharacters, SpecialCharactersEssentials, WordCount
+			ArticlePluginSet, CodeBlock, Alignment,
+			TableProperties, TableCellProperties, SpecialCharacters, SpecialCharactersEssentials,
+			Code, Underline, Strikethrough, Superscript, Subscript,
+			Highlight, FontColor, FontBackgroundColor, FontFamily, FontSize,
+			IndentBlock, WordCount, EasyImage,
+			TodoList, PageBreak, HorizontalLine, Mention, RemoveFormat, TextTransformation,
+			ImageResize, LinkImage,
+			PasteFromOffice, ListStyle
 		],
 		toolbar: [
 			'heading',
