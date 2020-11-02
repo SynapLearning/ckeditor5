@@ -38,8 +38,6 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount';
 
 import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config';
-import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
-import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
@@ -50,8 +48,7 @@ ClassicEditor
 			Highlight, FontColor, FontBackgroundColor, FontFamily, FontSize,
 			IndentBlock, WordCount, EasyImage,
 			TodoList, PageBreak, HorizontalLine, Mention, RemoveFormat, TextTransformation,
-			ImageResize, LinkImage,
-			PasteFromOffice, ListStyle
+			ImageResize, LinkImage
 		],
 		toolbar: [
 			'heading',
