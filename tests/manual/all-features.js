@@ -19,11 +19,14 @@ import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily';
 import FontSize from '@ckeditor/ckeditor5-font/src/fontsize';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
+import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock';
 import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
+import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle';
 import Mention from '@ckeditor/ckeditor5-mention/src/mention';
 import PageBreak from '@ckeditor/ckeditor5-page-break/src/pagebreak';
+import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters';
 import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials';
@@ -42,13 +45,14 @@ import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [
-			ArticlePluginSet, CodeBlock, Alignment,
-			TableProperties, TableCellProperties, SpecialCharacters, SpecialCharactersEssentials,
-			Code, Underline, Strikethrough, Superscript, Subscript,
-			Highlight, FontColor, FontBackgroundColor, FontFamily, FontSize,
-			IndentBlock, WordCount, EasyImage,
-			TodoList, PageBreak, HorizontalLine, Mention, RemoveFormat, TextTransformation,
-			ImageResize, LinkImage
+			ArticlePluginSet, Underline, Strikethrough, Superscript, Subscript, Code, RemoveFormat,
+			FontColor, FontBackgroundColor, FontFamily, FontSize, Highlight,
+			CodeBlock, TodoList, ListStyle, TableProperties, TableCellProperties,
+			EasyImage, ImageResize, LinkImage, AutoImage, HtmlEmbed,
+			AutoLink, Mention, TextTransformation,
+			Alignment, IndentBlock,
+			PasteFromOffice, PageBreak, HorizontalLine,
+			SpecialCharacters, SpecialCharactersEssentials, WordCount
 		],
 		toolbar: [
 			'heading',
@@ -60,6 +64,8 @@ ClassicEditor
 			'bulletedList', 'numberedList', 'todoList',
 			'|',
 			'blockQuote', 'imageUpload', 'insertTable', 'mediaEmbed', 'codeBlock',
+			'|',
+			'htmlEmbed',
 			'|',
 			'alignment', 'outdent', 'indent',
 			'|',
@@ -145,6 +151,9 @@ ClassicEditor
 					}
 				}
 			}
+		},
+		htmlEmbed: {
+			showPreviews: true
 		}
 	} )
 	.then( editor => {
