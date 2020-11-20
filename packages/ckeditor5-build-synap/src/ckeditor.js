@@ -36,6 +36,7 @@ import TableToolbar from "@ckeditor/ckeditor5-table/src/tabletoolbar";
 import TextTransformation from "@ckeditor/ckeditor5-typing/src/texttransformation";
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import UploadAdapter from "@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter";
+import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 
 class ClassicEditor extends ClassicEditorBase {}
 class BalloonEditor extends BalloonEditorBase {}
@@ -70,7 +71,8 @@ const plugins = [
 	Table,
 	TableToolbar,
 	TextTransformation,
-	UploadAdapter
+	UploadAdapter,
+	HtmlEmbed
 ];
 
 ClassicEditor.builtinPlugins = plugins;
@@ -109,6 +111,9 @@ const config = {
 	},
 	table: {
 		contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
+	},
+	htmlEmbed: {
+		showPreviews: true
 	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: "en",
