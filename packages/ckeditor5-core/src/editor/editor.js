@@ -90,6 +90,8 @@ export default class Editor {
 		this.plugins = new PluginCollection( this, availablePlugins, this._context.plugins );
 
 		/**
+		 * The locale instance.
+		 *
 		 * @readonly
 		 * @type {module:utils/locale~Locale}
 		 */
@@ -282,15 +284,29 @@ export default class Editor {
 	 *
 	 * @param {String} commandName The name of the command to execute.
 	 * @param {*} [...commandParams] Command parameters.
+	 * @returns {*} The value returned by the {@link module:core/commandcollection~CommandCollection#execute `commands.execute()`}.
 	 */
 	execute( ...args ) {
 		try {
-			this.commands.execute( ...args );
+			return this.commands.execute( ...args );
 		} catch ( err ) {
 			// @if CK_DEBUG // throw err;
 			/* istanbul ignore next */
 			CKEditorError.rethrowUnexpectedError( err, this );
 		}
+	}
+
+	/**
+	 * Focuses the editor.
+	 *
+	 * **Note** To explicitly focus the editing area of the editor, use
+	 * {@link module:engine/view/view~View#focus `editor.editing.view.focus()`} method of the editing view.
+	 *
+	 * Check out the {@glink framework/guides/deep-dive/ui/focus-tracking#focus-in-the-editor-ui "Focus in the editor ui"} section
+	 * of the {@glink framework/guides/deep-dive/ui/focus-tracking "Deep dive into focus tracking" guide} to learn more.
+	 */
+	focus() {
+		this.editing.view.focus();
 	}
 
 	/**

@@ -37,6 +37,10 @@ import objectLeft from '@ckeditor/ckeditor5-core/theme/icons/object-left.svg';
 import objectCenter from '@ckeditor/ckeditor5-core/theme/icons/object-center.svg';
 import objectRight from '@ckeditor/ckeditor5-core/theme/icons/object-right.svg';
 import objectFullWidth from '@ckeditor/ckeditor5-core/theme/icons/object-full-width.svg';
+import objectSizeFull from '@ckeditor/ckeditor5-core/theme/icons/object-size-full.svg';
+import objectSizeLarge from '@ckeditor/ckeditor5-core/theme/icons/object-size-large.svg';
+import objectSizeSmall from '@ckeditor/ckeditor5-core/theme/icons/object-size-small.svg';
+import objectSizeMedium from '@ckeditor/ckeditor5-core/theme/icons/object-size-medium.svg';
 import pencil from '@ckeditor/ckeditor5-core/theme/icons/pencil.svg';
 import pilcrow from '@ckeditor/ckeditor5-core/theme/icons/pilcrow.svg';
 import quote from '@ckeditor/ckeditor5-core/theme/icons/quote.svg';
@@ -59,6 +63,8 @@ import outdent from '@ckeditor/ckeditor5-indent/theme/icons/outdent.svg';
 
 import marker from '@ckeditor/ckeditor5-highlight/theme/icons/marker.svg';
 import pen from '@ckeditor/ckeditor5-highlight/theme/icons/pen.svg';
+
+import html from '@ckeditor/ckeditor5-html-embed/theme/icons/html.svg';
 
 import link from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 import unlink from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
@@ -110,8 +116,8 @@ const icons = {
 	// core
 	alignTop, alignBottom, alignMiddle, alignLeft, alignCenter, alignRight,
 	alignJustify, cancel, check, eraser, image, lowVision, objectCenter,
-	objectFullWidth, objectLeft, objectRight, pencil, pilcrow, quote,
-	threeVerticalDots,
+	objectFullWidth, objectLeft, objectRight, objectSizeFull, objectSizeLarge,
+	objectSizeSmall, objectSizeMedium, pencil, pilcrow, quote, threeVerticalDots,
 
 	// font
 	fontFamily, fontSize, fontColor, fontBackground,
@@ -121,6 +127,9 @@ const icons = {
 
 	// highlight
 	marker, pen,
+
+	// html-embed,
+	html,
 
 	// indent
 	indent, outdent,
@@ -174,7 +183,7 @@ for ( const i in icons ) {
 		tooltip: true
 	} );
 
-	button.iconView.fillColor = '#FFDA51';
+	button.iconView.fillColor = 'hsl(47deg 100% 66%)';
 
 	toolbar.items.add( button );
 }
@@ -182,4 +191,7 @@ for ( const i in icons ) {
 toolbar.class = 'ck-editor-toolbar ck-reset_all';
 toolbar.render();
 
-document.body.appendChild( toolbar.element );
+document.querySelector( '#standard' ).appendChild( toolbar.element );
+document.querySelector( '#color' ).appendChild( toolbar.element.cloneNode( true ) );
+document.querySelector( '#inverted' ).appendChild( toolbar.element.cloneNode( true ) );
+document.querySelector( '#zoom' ).appendChild( toolbar.element.cloneNode( true ) );

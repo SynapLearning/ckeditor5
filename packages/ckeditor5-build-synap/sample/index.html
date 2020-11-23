@@ -53,7 +53,9 @@
 		<script src="../build/ckeditor.js"></script>
 		<script>
 			SynapEditor.ClassicEditor.create(
-				document.querySelector("#classic-editor")
+				document.querySelector("#classic-editor"), {
+					toolbar: ['htmlEmbed', 'MathType', 'ChemType']
+				}
 			).catch((error) => {
 				console.error(
 					"There was a problem initializing the classic editor.",

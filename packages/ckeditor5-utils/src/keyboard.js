@@ -57,13 +57,10 @@ export function getCode( key ) {
 			/**
 			 * Unknown key name. Only key names contained by the {@link module:utils/keyboard~keyCodes} can be used.
 			 *
-			 * @errror keyboard-unknown-key
+			 * @error keyboard-unknown-key
 			 * @param {String} key
 			 */
-			throw new CKEditorError(
-				'keyboard-unknown-key: Unknown key name.',
-				null, { key }
-			);
+			throw new CKEditorError( 'keyboard-unknown-key', null, { key } );
 		}
 	} else {
 		keyCode = key.keyCode +
@@ -77,7 +74,7 @@ export function getCode( key ) {
 
 /**
  * Parses keystroke and returns a keystroke code that will match the code returned by
- * link {@link module:utils/keyboard.getCode} for a corresponding {@link module:utils/keyboard~KeystrokeInfo keystroke info}.
+ * link {@link module:utils/keyboard~getCode} for a corresponding {@link module:utils/keyboard~KeystrokeInfo keystroke info}.
  *
  * The keystroke can be passed in two formats:
  *

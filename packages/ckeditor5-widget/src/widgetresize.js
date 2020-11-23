@@ -12,6 +12,7 @@ import Resizer from './widgetresize/resizer';
 import DomEmitterMixin from '@ckeditor/ckeditor5-utils/src/dom/emittermixin';
 import global from '@ckeditor/ckeditor5-utils/src/dom/global';
 import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin';
+import MouseObserver from '@ckeditor/ckeditor5-engine/src/view/observer/mouseobserver';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
 import { throttle } from 'lodash-es';
 
@@ -40,11 +41,10 @@ export default class WidgetResize extends Plugin {
 		/**
 		 * The currently visible resizer.
 		 *
-		 * @protected
 		 * @observable
-		 * @member {module:widget/widgetresize/resizer~Resizer|null} #_visibleResizer
+		 * @member {module:widget/widgetresize/resizer~Resizer|null} #visibleResizer
 		 */
-		this.set( '_visibleResizer', null );
+		this.set( 'visibleResizer', null );
 
 		/**
 		 * References an active resizer.
@@ -71,25 +71,26 @@ export default class WidgetResize extends Plugin {
 			isFormatting: true
 		} );
 
+		this.editor.editing.view.addObserver( MouseObserver );
+
 		this._observer = Object.create( DomEmitterMixin );
 
-		this._observer.listenTo( domDocument, 'mousedown', this._mouseDownListener.bind( this ) );
+		this.listenTo( this.editor.editing.view.document, 'mousedown', this._mouseDownListener.bind( this ), { priority: 'high' } );
 
 		this._observer.listenTo( domDocument, 'mousemove', this._mouseMoveListener.bind( this ) );
-
 		this._observer.listenTo( domDocument, 'mouseup', this._mouseUpListener.bind( this ) );
 
 		const redrawFocusedResizer = () => {
-			if ( this._visibleResizer ) {
-				this._visibleResizer.redraw();
+			if ( this.visibleResizer ) {
+				this.visibleResizer.redraw();
 			}
 		};
 
-		const redrawFocusedResizerThrottled = throttle( redrawFocusedResizer, 200 ); // 5fps
+		const redrawFocusedResizerThrottled = throttle( redrawFocusedResizer, 200 );
 
 		// Redraws occurring upon a change of visible resizer must not be throttled, as it is crucial for the initial
 		// render. Without it the resizer frame would be misaligned with resizing host for a fraction of second.
-		this.on( 'change:_visibleResizer', redrawFocusedResizer );
+		this.on( 'change:visibleResizer', redrawFocusedResizer );
 
 		// Redrawing on any change of the UI of the editor (including content changes).
 		this.editor.ui.on( 'update', redrawFocusedResizerThrottled );
@@ -102,7 +103,7 @@ export default class WidgetResize extends Plugin {
 		viewSelection.on( 'change', () => {
 			const selectedElement = viewSelection.getSelectedElement();
 
-			this._visibleResizer = this._getResizerByViewElement( selectedElement ) || null;
+			this.visibleResizer = this.getResizerByViewElement( selectedElement ) || null;
 		} );
 	}
 
@@ -147,7 +148,26 @@ export default class WidgetResize extends Plugin {
 
 		this._resizers.set( options.viewElement, resizer );
 
+		const viewSelection = this.editor.editing.view.document.selection;
+		const selectedElement = viewSelection.getSelectedElement();
+
+		// It could be that the element the resizer is created for is currently focused. In that
+		// case it should become visible.
+		if ( this.getResizerByViewElement( selectedElement ) == resizer ) {
+			this.visibleResizer = resizer;
+		}
+
 		return resizer;
+	}
+
+	/**
+	 * Returns a resizer created for a given view element (widget element).
+	 *
+	 * @param {module:engine/view/containerelement~ContainerElement} viewElement View element associated with the resizer.
+	 * @returns {module:widget/widgetresize/resizer~Resizer|undefined}
+	 */
+	getResizerByViewElement( viewElement ) {
+		return this._resizers.get( viewElement );
 	}
 
 	/**
@@ -166,29 +186,25 @@ export default class WidgetResize extends Plugin {
 	}
 
 	/**
-	 * Returns a resizer created for a given view element (widget element).
-	 *
-	 * @protected
-	 * @param {module:engine/view/containerelement~ContainerElement} viewElement
-	 * @returns {module:widget/widgetresize/resizer~Resizer}
-	 */
-	_getResizerByViewElement( viewElement ) {
-		return this._resizers.get( viewElement );
-	}
-
-	/**
 	 * @protected
 	 * @param {module:utils/eventinfo~EventInfo} event
 	 * @param {Event} domEventData Native DOM event.
 	 */
 	_mouseDownListener( event, domEventData ) {
-		if ( !Resizer.isResizeHandle( domEventData.target ) ) {
+		const resizeHandle = domEventData.domTarget;
+
+		if ( !Resizer.isResizeHandle( resizeHandle ) ) {
 			return;
 		}
-		const resizeHandle = domEventData.target;
+
 		this._activeResizer = this._getResizerByHandle( resizeHandle );
+
 		if ( this._activeResizer ) {
 			this._activeResizer.begin( resizeHandle );
+
+			// Do not call other events when resizing. See: #6755.
+			event.stop();
+			domEventData.preventDefault();
 		}
 	}
 

@@ -192,7 +192,7 @@ describe( 'image widget utils', () => {
 		it( 'should be true when the selection is inside isLimit element which allows image', () => {
 			model.schema.register( 'table', { allowWhere: '$block', isLimit: true, isObject: true, isBlock: true } );
 			model.schema.register( 'tableRow', { allowIn: 'table', isLimit: true } );
-			model.schema.register( 'tableCell', { allowIn: 'tableRow', isLimit: true } );
+			model.schema.register( 'tableCell', { allowIn: 'tableRow', isLimit: true, isSelectable: true } );
 			model.schema.extend( '$block', { allowIn: 'tableCell' } );
 			editor.conversion.for( 'downcast' ).elementToElement( { model: 'table', view: 'table' } );
 			editor.conversion.for( 'downcast' ).elementToElement( { model: 'tableRow', view: 'tableRow' } );
@@ -240,9 +240,7 @@ describe( 'image widget utils', () => {
 		it( 'should insert image at selection position as other widgets', () => {
 			setModelData( model, '<paragraph>f[o]o</paragraph>' );
 
-			model.change( writer => {
-				insertImage( writer, model );
-			} );
+			insertImage( model );
 
 			expect( getModelData( model ) ).to.equal( '[<image></image>]<paragraph>foo</paragraph>' );
 		} );
@@ -250,9 +248,7 @@ describe( 'image widget utils', () => {
 		it( 'should insert image with given attributes', () => {
 			setModelData( model, '<paragraph>f[o]o</paragraph>' );
 
-			model.change( writer => {
-				insertImage( writer, model, { src: 'bar' } );
-			} );
+			insertImage( model, { src: 'bar' } );
 
 			expect( getModelData( model ) ).to.equal( '[<image src="bar"></image>]<paragraph>foo</paragraph>' );
 		} );
@@ -268,9 +264,7 @@ describe( 'image widget utils', () => {
 
 			setModelData( model, '<other>[]</other>' );
 
-			model.change( writer => {
-				insertImage( writer, model );
-			} );
+			insertImage( model );
 
 			expect( getModelData( model ) ).to.equal( '<other>[]</other>' );
 		} );

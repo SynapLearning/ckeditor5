@@ -72,7 +72,8 @@ describe( 'WidgetResize', () => {
 			const unrelatedElement = document.createElement( 'div' );
 
 			editor.plugins.get( WidgetResize )._mouseDownListener( {}, {
-				target: unrelatedElement
+				domTarget: unrelatedElement,
+				preventDefault: sinon.spy()
 			} );
 		} );
 
@@ -113,6 +114,26 @@ describe( 'WidgetResize', () => {
 
 			resizerMouseSimulator.dragTo( editor, domParts.resizeHandle, initialPointerPosition );
 			// No exception should be thrown.
+		} );
+
+		it( 'stops the event after starting resizing', () => {
+			const stopSpy = sinon.spy().named( 'stop' );
+
+			const domParts = getWidgetDomParts( editor, widget, 'top-right' );
+
+			resizerMouseSimulator.down( editor, domParts.resizeHandle, { stop: stopSpy } );
+
+			expect( stopSpy.called ).to.be.equal( true );
+		} );
+
+		it( 'prevents default action after starting resizing', () => {
+			const preventDefaultSpy = sinon.spy().named( 'preventDefault' );
+
+			const domParts = getWidgetDomParts( editor, widget, 'top-right' );
+
+			resizerMouseSimulator.down( editor, domParts.resizeHandle, { preventDefault: preventDefaultSpy } );
+
+			expect( preventDefaultSpy.called ).to.be.equal( true );
 		} );
 	} );
 
@@ -447,20 +468,43 @@ describe( 'WidgetResize', () => {
 	} );
 
 	describe( 'attachTo()', () => {
-		it( 'works without WidgetToolbarRepository plugin', async () => {
-			const localEditorElement = createEditorElement();
-			const localEditor = await ClassicEditor.create( localEditorElement, {
+		let localEditorElement, localEditor;
+
+		beforeEach( async () => {
+			localEditorElement = createEditorElement();
+			localEditor = await ClassicEditor.create( localEditorElement, {
 				plugins: [
 					WidgetResize, simpleWidgetPlugin
 				]
 			} );
+		} );
 
+		afterEach( () => {
+			localEditorElement.remove();
+			return localEditor.destroy();
+		} );
+
+		it( 'works without WidgetToolbarRepository plugin', async () => {
 			setModelData( localEditor.model, '[<widget></widget>]' );
 
-			const resizerOptions = {
-				modelElement: localEditor.model.document.getRoot().getChild( 0 ),
-				viewElement: localEditor.editing.view.document.getRoot().getChild( 0 ),
-				editor: localEditor,
+			localEditor.plugins.get( WidgetResize ).attachTo( gerResizerOptions( localEditor ) );
+			// Nothing should be thrown.
+		} );
+
+		it( 'sets the visible resizer if associated widget is already focused', async () => {
+			setModelData( localEditor.model, '[<widget></widget>]' );
+
+			const widgetResizePlugin = localEditor.plugins.get( WidgetResize );
+			const resizer = widgetResizePlugin.attachTo( gerResizerOptions( localEditor ) );
+
+			expect( widgetResizePlugin.visibleResizer ).to.eql( resizer );
+		} );
+
+		function gerResizerOptions( editor ) {
+			return {
+				modelElement: editor.model.document.getRoot().getChild( 0 ),
+				viewElement: editor.editing.view.document.getRoot().getChild( 0 ),
+				editor,
 
 				isCentered: () => false,
 				getHandleHost( domWidgetElement ) {
@@ -472,13 +516,7 @@ describe( 'WidgetResize', () => {
 
 				onCommit: commitStub
 			};
-
-			localEditor.plugins.get( WidgetResize ).attachTo( resizerOptions );
-			// Nothing should be thrown.
-			// And clean up.
-			localEditorElement.remove();
-			return localEditor.destroy();
-		} );
+		}
 	} );
 
 	describe( 'init()', () => {
@@ -577,19 +615,19 @@ describe( 'WidgetResize', () => {
 		editor.conversion.for( 'downcast' )
 			.elementToElement( {
 				model: 'widget',
-				view: ( modelItem, viewWriter ) => {
-					const parentDiv = viewWriter.createContainerElement( 'div' );
-					viewWriter.setStyle( 'height', '50px', parentDiv );
-					viewWriter.setStyle( 'width', '25%', parentDiv ); // It evaluates to 100px.
+				view: ( modelItem, { writer } ) => {
+					const parentDiv = writer.createContainerElement( 'div' );
+					writer.setStyle( 'height', '50px', parentDiv );
+					writer.setStyle( 'width', '25%', parentDiv ); // It evaluates to 100px.
 
-					const subDiv = viewWriter.createContainerElement( 'div' );
-					viewWriter.insert( viewWriter.createPositionAt( subDiv, 'start' ), viewWriter.createText( 'foo' ) );
-					viewWriter.addClass( 'sub-div', subDiv );
-					viewWriter.setStyle( 'height', '20px', subDiv );
-					viewWriter.setStyle( 'width', '50px', subDiv );
-					viewWriter.insert( viewWriter.createPositionAt( parentDiv, 'start' ), subDiv );
+					const subDiv = writer.createContainerElement( 'div' );
+					writer.insert( writer.createPositionAt( subDiv, 'start' ), writer.createText( 'foo' ) );
+					writer.addClass( 'sub-div', subDiv );
+					writer.setStyle( 'height', '20px', subDiv );
+					writer.setStyle( 'width', '50px', subDiv );
+					writer.insert( writer.createPositionAt( parentDiv, 'start' ), subDiv );
 
-					return toWidget( parentDiv, viewWriter, {
+					return toWidget( parentDiv, writer, {
 						label: 'element label'
 					} );
 				}

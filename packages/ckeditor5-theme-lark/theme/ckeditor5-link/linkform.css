@@ -3,11 +3,10 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-@import "@ckeditor/ckeditor5-ui/theme/mixins/_rwd.css";
 @import "@ckeditor/ckeditor5-ui/theme/mixins/_dir.css";
 
 .ck.ck-link-form {
-	padding: var(--ck-spacing-standard);
+	padding: var(--ck-spacing-large);
 
 	&:focus {
 		/* https://github.com/ckeditor/ckeditor5-link/issues/90 */
@@ -31,7 +30,7 @@
 		width: calc(.8 * var(--ck-input-text-width));
 
 		& .ck-labeled-field-view {
-			margin: var(--ck-spacing-standard) var(--ck-spacing-standard) 0;
+			margin: var(--ck-spacing-large) var(--ck-spacing-large) 0;
 
 			& .ck-input-text {
 				min-width: 0;
@@ -41,7 +40,7 @@
 
 		& .ck-button {
 			padding: var(--ck-spacing-standard);
-			margin-top: var(--ck-spacing-standard);
+			margin-top: var(--ck-spacing-large);
 
 			border-radius: 0;
 			border: 0;
@@ -75,7 +74,7 @@
 	min-width: var(--ck-input-text-width);
 
 	& .ck-labeled-field-view {
-		margin: var(--ck-spacing-standard) var(--ck-spacing-standard) var(--ck-spacing-small);
+		margin: var(--ck-spacing-large) var(--ck-spacing-large) var(--ck-spacing-small);
 
 		& .ck-input-text {
 			min-width: 0;
@@ -93,10 +92,6 @@
 
 		@mixin ck-dir ltr {
 			margin-left: 0;
-
-			&:first-of-type {
-				border-right: 1px solid var(--ck-color-base-border);
-			}
 		}
 
 		@mixin ck-dir rtl {
@@ -110,10 +105,11 @@
 
 	/* Using additional `.ck` class for stronger CSS specificity than `.ck.ck-link-form > :not(:first-child)`. */
 	& .ck.ck-list {
-		margin-left: 0;
+		margin: var(--ck-spacing-standard) var(--ck-spacing-large);
 
 		& .ck-button.ck-switchbutton {
 			border: 0;
+			padding: 0;
 			width: 100%;
 
 			&:hover {

@@ -65,31 +65,32 @@ export function getSelectedImageWidget( selection ) {
  * @returns {Boolean}
  */
 export function isImage( modelElement ) {
-	return !!modelElement && modelElement.is( 'image' );
+	return !!modelElement && modelElement.is( 'element', 'image' );
 }
 
 /**
  * Handles inserting single file. This method unifies image insertion using {@link module:widget/utils~findOptimalInsertionPosition} method.
  *
- *		model.change( writer => {
- *			insertImage( writer, model, { src: 'path/to/image.jpg' } );
- *		} );
+ *		insertImage( model, { src: 'path/to/image.jpg' } );
  *
- * @param {module:engine/model/writer~Writer} writer
  * @param {module:engine/model/model~Model} model
  * @param {Object} [attributes={}] Attributes of inserted image
+ * @param {module:engine/model/position~Position} [insertPosition] Position to insert the image. If not specified,
+ * the {@link module:widget/utils~findOptimalInsertionPosition} logic will be applied.
  */
-export function insertImage( writer, model, attributes = {} ) {
-	const imageElement = writer.createElement( 'image', attributes );
+export function insertImage( model, attributes = {}, insertPosition = null ) {
+	model.change( writer => {
+		const imageElement = writer.createElement( 'image', attributes );
 
-	const insertAtSelection = findOptimalInsertionPosition( model.document.selection, model );
+		const insertAtSelection = insertPosition || findOptimalInsertionPosition( model.document.selection, model );
 
-	model.insertContent( imageElement, insertAtSelection );
+		model.insertContent( imageElement, insertAtSelection );
 
-	// Inserting an image might've failed due to schema regulations.
-	if ( imageElement.parent ) {
-		writer.setSelection( imageElement, 'on' );
-	}
+		// Inserting an image might've failed due to schema regulations.
+		if ( imageElement.parent ) {
+			writer.setSelection( imageElement, 'on' );
+		}
+	} );
 }
 
 /**
@@ -129,7 +130,7 @@ export function getViewImgFromWidget( figureView ) {
 		}
 	}
 
-	return figureChildren.find( viewChild => viewChild.is( 'img' ) );
+	return figureChildren.find( viewChild => viewChild.is( 'element', 'img' ) );
 }
 
 // Checks if image is allowed by schema in optimal insertion parent.
@@ -152,7 +153,7 @@ function checkSelectionOnObject( selection, schema ) {
 
 // Checks if selection is placed in other image (ie. in caption).
 function isInOtherImage( selection ) {
-	return [ ...selection.focus.getAncestors() ].every( ancestor => !ancestor.is( 'image' ) );
+	return [ ...selection.focus.getAncestors() ].every( ancestor => !ancestor.is( 'element', 'image' ) );
 }
 
 // Returns a node that will be used to insert image with `model.insertContent` to check if image can be placed there.
@@ -161,7 +162,7 @@ function getInsertImageParent( selection, model ) {
 
 	const parent = insertAt.parent;
 
-	if ( parent.isEmpty && !parent.is( '$root' ) ) {
+	if ( parent.isEmpty && !parent.is( 'element', '$root' ) ) {
 		return parent.parent;
 	}
 

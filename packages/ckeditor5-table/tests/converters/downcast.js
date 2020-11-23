@@ -5,6 +5,7 @@
 
 import VirtualTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/virtualtesteditor';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import UndoEditing from '@ckeditor/ckeditor5-undo/src/undoediting';
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
 import { getData as getViewData } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
@@ -19,7 +20,7 @@ describe( 'downcast converters', () => {
 	testUtils.createSinonSandbox();
 
 	beforeEach( async () => {
-		editor = await VirtualTestEditor.create( { plugins: [ Paragraph, TableEditing ] } );
+		editor = await VirtualTestEditor.create( { plugins: [ Paragraph, TableEditing, UndoEditing ] } );
 
 		model = editor.model;
 		root = model.document.getRoot( 'main' );
@@ -840,8 +841,10 @@ describe( 'downcast converters', () => {
 		} );
 	} );
 
-	describe( 'downcastTableHeadingRowsChange()', () => {
+	describe( 'downcastTableHeadingRowsChange', () => {
 		// The heading rows change downcast conversion is not executed in data pipeline.
+		// Note that headingRows table attribute triggers whole table downcast.
+
 		describe( 'editing pipeline', () => {
 			it( 'should work for adding heading rows', () => {
 				setModelData( model, modelTable( [
@@ -941,36 +944,6 @@ describe( 'downcast converters', () => {
 				], { headingRows: 2, asWidget: true } ) );
 			} );
 
-			it( 'should be possible to overwrite', () => {
-				editor.conversion.attributeToAttribute( {
-					model: 'headingRows',
-					view: 'headingRows',
-					converterPriority: 'high'
-				} );
-				setModelData( model, modelTable( [ [ '00' ] ] ) );
-
-				const table = root.getChild( 0 );
-
-				model.change( writer => {
-					writer.setAttribute( 'headingRows', 1, table );
-				} );
-
-				assertEqualMarkup( getViewData( view, { withoutSelection: true } ),
-					'<figure class="ck-widget ck-widget_with-selection-handle table" contenteditable="false" headingRows="1">' +
-						'<div class="ck ck-widget__selection-handle"></div>' +
-						'<table>' +
-							'<tbody>' +
-								'<tr>' +
-									'<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">' +
-										'<span style="display:inline-block">00</span>' +
-									'</td>' +
-								'</tr>' +
-							'</tbody>' +
-						'</table>' +
-					'</figure>'
-				);
-			} );
-
 			it( 'should work with adding table rows at the beginning of a table', () => {
 				setModelData( model, modelTable( [
 					[ '00', '01' ],
@@ -1047,6 +1020,34 @@ describe( 'downcast converters', () => {
 					'</figure>'
 				);
 			} );
+
+			it( 'should properly integrate with undo', () => {
+				setModelData( model, modelTable( [
+					[ '00', '01' ],
+					[ '10', '11' ],
+					[ '20', '21' ]
+				], { headingRows: 1 } ) );
+
+				const table = root.getChild( 0 );
+
+				model.change( writer => {
+					writer.setAttribute( 'headingRows', 2, table );
+				} );
+
+				assertEqualMarkup( getViewData( view, { withoutSelection: true } ), viewTable( [
+					[ '00', '01' ],
+					[ '10', '11' ],
+					[ '20', '21' ]
+				], { headingRows: 2, asWidget: true } ) );
+
+				editor.execute( 'undo' );
+
+				assertEqualMarkup( getViewData( view, { withoutSelection: true } ), viewTable( [
+					[ '00', '01' ],
+					[ '10', '11' ],
+					[ '20', '21' ]
+				], { headingRows: 1, asWidget: true } ) );
+			} );
 		} );
 	} );
 
@@ -1084,7 +1085,7 @@ describe( 'downcast converters', () => {
 				);
 			} );
 
-			it( 'should react to removed row form the end of a body rows (no heading rows)', () => {
+			it( 'should react to removed row from the end of a body rows (no heading rows)', () => {
 				setModelData( model, modelTable( [
 					[ '00[]', '01' ],
 					[ '10', '11' ]
@@ -1148,7 +1149,7 @@ describe( 'downcast converters', () => {
 				);
 			} );
 
-			it( 'should react to removed row form the end of a heading rows (no body rows)', () => {
+			it( 'should react to removed row from the end of a heading rows (no body rows)', () => {
 				setModelData( model, modelTable( [
 					[ '00[]', '01' ],
 					[ '10', '11' ]
@@ -1181,7 +1182,7 @@ describe( 'downcast converters', () => {
 				);
 			} );
 
-			it( 'should react to removed row form the end of a heading rows (first cell in body has colspan)', () => {
+			it( 'should react to removed row from the end of a heading rows (first cell in body has colspan)', () => {
 				setModelData( model, modelTable( [
 					[ '00[]', '01', '02', '03' ],
 					[ { rowspan: 2, colspan: 2, contents: '10' }, '12', '13' ],
