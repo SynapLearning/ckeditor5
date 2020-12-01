@@ -21,6 +21,7 @@ import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
 import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import ImageUpload from "@ckeditor/ckeditor5-image/src/imageupload";
+import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import Link from "@ckeditor/ckeditor5-link/src/link";
@@ -72,7 +73,8 @@ const plugins = [
 	TableToolbar,
 	TextTransformation,
 	UploadAdapter,
-	HtmlEmbed
+	HtmlEmbed,
+	LinkImage
 ];
 
 ClassicEditor.builtinPlugins = plugins;
@@ -103,10 +105,13 @@ const config = {
 	},
 	image: {
 		toolbar: [
-			"imageStyle:full",
-			"imageStyle:side",
-			"|",
-			"imageTextAlternative",
+			'imageTextAlternative',
+            '|',
+            'imageStyle:alignLeft',
+            'imageStyle:full',
+            'imageStyle:alignRight',
+			'|',
+            'linkImage'
 		],
 	},
 	table: {
